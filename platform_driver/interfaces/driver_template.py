@@ -229,11 +229,14 @@ class DriverConfig:
 
 
 class TemplateInterface(BasicRevert, BaseInterface):
-    def __init__(self, passed_register_types: List[ImplementedRegister],  **kwargs):
+    def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
         self.point_map: Dict[str, ImplementedRegister] = {}  # {register.point_name: register}
-        self.register_types: List[ImplementedRegister] = passed_register_types  # TODO: add sanity check for restister_types, e.g., count == register counts
+        self.register_types: List[ImplementedRegister] = []  # TODO: add sanity check for restister_types, e.g., count == register counts
+
+        self.csv_config = None  # TODO: try to get this value, potentially from def configure
+        self.driver_config_in_json_config = None  # TODO: try to get this value, potentially from def configure
 
         # TODO: clean up this public interface
         # from *.csv configure file "driver_config": {...}
@@ -261,6 +264,11 @@ class TemplateInterface(BasicRevert, BaseInterface):
         """
         print("========================================== csv_config, ", csv_config)
         print("========================================== driver_config_in_json_config, ", driver_config_in_json_config)
+        self.csv_config = csv_config
+        self.driver_config_in_json_config = driver_config_in_json_config
+
+        # TODO configuration validation, i.e., self.config_check(...)
+        # self.config_check
         self.parse_config(csv_config, driver_config_in_json_config)
 
     @abc.abstractmethod
@@ -380,7 +388,6 @@ class TemplateInterface(BasicRevert, BaseInterface):
 
 class DriverInterfaceError(Exception):
     pass
-
 
 
 
